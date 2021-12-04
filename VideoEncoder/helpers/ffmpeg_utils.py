@@ -29,7 +29,7 @@ def get_codec(filepath, channel="v:0"):
 
 def encode(filepath):
     basefilepath = os.path.splitext(filepath)[0]
-    output_filepath = basefilepath + ".HEVC" + ".mp4"
+    output_filepath = basefilepath + ".HEVC" + ".mkv"
     assert output_filepath != filepath
     if os.path.isfile(output_filepath):
         logging.info('Skipping "{}": file already exists'.format(output_filepath))
@@ -55,10 +55,10 @@ def encode(filepath):
     audio_codec = get_codec(filepath, channel="a:0")
     if audio_codec == []:
         audio_opts = ""
-    elif audio_codec[0] == "aac":
+    elif audio_codec[0] == "opus":
         audio_opts = "-c:a copy"
     else:
-        audio_opts = "-c:a aac -b:a 128k"
+        audio_opts = "-c:a libopus -b:a 64k"
     call(
         ["ffmpeg", "-i", filepath]
         + video_opts.split()
